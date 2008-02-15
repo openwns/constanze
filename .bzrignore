@@ -11,3 +11,4 @@ config/pushMailRecipients.py
 config/private.py
 config/bversion.hpp
 .objs
+doc/examples
