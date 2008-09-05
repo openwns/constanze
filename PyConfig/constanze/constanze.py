@@ -26,7 +26,6 @@
 ###############################################################################
 
 from openwns.module import Module
-import openwns.probebus
 import openwns.distribution
 
 class Constanze(Module):
