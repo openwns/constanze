@@ -25,14 +25,7 @@
 #
 ###############################################################################
 
-from openwns.module import Module
 import openwns.distribution
-
-class Constanze(Module):
-    station = None
-
-    def __init__(self):
-        super(Constanze, self).__init__("constanze", "constanze-unstable-1.0")
 
 class Traffic(object):
     iat = None        # average interarrival time [seconds]

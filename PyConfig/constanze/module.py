@@ -25,7 +25,10 @@
 #
 ###############################################################################
 
-import openwns
-import module
+from openwns.module import Module
 
-openwns.simulator.OpenWNS.modules.constanze = module.Constanze()
+class Constanze(Module):
+    station = None
+
+    def __init__(self):
+        super(Constanze, self).__init__("constanze", "constanze-unstable-1.0")
