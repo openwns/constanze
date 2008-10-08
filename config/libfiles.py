@@ -32,8 +32,8 @@ hppFiles = [
 ]
 pyconfigs = [
     'constanze/__init__.py',
-    'constanze/distribution/CDFTable.py',
-    'constanze/distibution/__init__.py',
+    'constanze/distribution/CDFTables.py',
+    'constanze/distribution/__init__.py',
     'constanze/evaluation/__init__.py',
     'constanze/evaluation/default.py',
     'constanze/module.py',
