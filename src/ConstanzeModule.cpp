@@ -27,9 +27,6 @@
 
 #include <CONSTANZE/ConstanzeModule.hpp>
 
-#include <CONSTANZE/bversion.hpp>
-
-#include <WNS/module/VersionInformation.hpp>
 #include <WNS/pyconfig/helper/Functions.hpp>
 #include <WNS/probe/bus/ProbeBus.hpp>
 #include <WNS/probe/bus/ProbeBusRegistry.hpp>
@@ -45,7 +42,6 @@ STATIC_FACTORY_REGISTER_WITH_CREATOR(
 ConstanzeModule::ConstanzeModule(const wns::pyconfig::View& _pyConfigView) :
 	wns::module::Module<ConstanzeModule>(_pyConfigView)
 {
-	version = wns::module::VersionInformation(BUILDVINFO);
 }
 
 ConstanzeModule::~ConstanzeModule()
@@ -63,15 +59,3 @@ void ConstanzeModule::startUp()
 void ConstanzeModule::shutDown()
 {
 }
-
-/*
-  Local Variables:
-  mode: c++
-  fill-column: 80
-  c-basic-offset: 8
-  c-comment-only-line-offset: 0
-  c-tab-always-indent: t
-  indent-tabs-mode: t
-  tab-width: 8
-  End:
-*/

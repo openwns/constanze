@@ -31,4 +31,4 @@ class Constanze(Module):
     station = None
 
     def __init__(self):
-        super(Constanze, self).__init__("constanze", "constanze-unstable-1.0")
+        super(Constanze, self).__init__("constanze", "constanze")
