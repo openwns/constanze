@@ -55,7 +55,6 @@ class Listener(object):
 
     def __init__(self, _name, parentLogger = None, **kw):
         self.name = _name
-        #self.logger = wns.Logger.Logger("CONST", "Listener", True, parentLogger)
         self.logger = Logger("Listener", True, parentLogger)
         measurement = Measurement()
         attrsetter(self, kw)
@@ -74,7 +73,6 @@ class UDPBinding(object):
         self.domainName = _domainName;
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
-        #self.logger = wns.Logger.Logger("CONST", "UDPBinding", True, parentLogger)
         self.logger = Logger("UDPBinding", True, parentLogger)
 
 class UDPListenerBinding(object):
@@ -87,7 +85,6 @@ class UDPListenerBinding(object):
 
     def __init__(self, _listenPort, parentLogger = None):
         self.listenPort = _listenPort
-        #self.logger = wns.Logger.Logger("CONST", "UDPListenerBinding", True, parentLogger)
         self.logger = Logger("UDPListenerBinding", True, parentLogger)
 
 class TCPBinding(object):
@@ -104,7 +101,6 @@ class TCPBinding(object):
         self.domainName = _domainName
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
-        #self.logger = wns.Logger.Logger("CONST", "TCPBinding", True, parentLogger)
         self.logger = Logger("TCPBinding", True, parentLogger)
 
 class TCPListenerBinding(object):
@@ -117,9 +113,66 @@ class TCPListenerBinding(object):
 
     def __init__(self, _listenPort, parentLogger = None):
         self.listenPort = _listenPort
-        #self.logger = wns.Logger.Logger("CONST", "TCPListenerBinding", True, parentLogger)
         self.logger = Logger("TCPListenerBinding", True, parentLogger)
 
+class IPBinding(object):
+    nameInBindingFactory = "IpBinding"
+    # the IP service
+    ipDataTransmission = "ip.dataTransmission"
+
+    dnsService = "ip.dns"
+
+    # IP specific parameters
+    sourceDomainName = None
+
+    destinationDomainName = None
+
+    logger = None
+
+    def __init__(self, _sourceDomainName, _destinationDomainName, parentLogger = None):
+        self.sourceDomainName = _sourceDomainName
+        self.destinationDomainName = _destinationDomainName
+        self.logger = Logger("IPBinding", True, parentLogger)
+
+class IPListenerBinding(object):
+    nameInBindingFactory = "IpListenerBinding"
+    # the IP service
+    ipNotification = "ip.notification"
+    # IP specific parameters
+    listenDomainName = None
+    logger = None
+
+    def __init__(self, _listenDomainName, parentLogger = None):
+        self.listenDomainName = _listenDomainName
+        self.logger = Logger("IPListenerBinding", True, parentLogger)
+        
+class DllBinding(object):
+    nameInBindingFactory = "DllBinding"
+    # the DLL service
+    dllDataTransmission = None
+    # DLL specific parameters
+    destinationDllAddress = None
+    logger = None
+
+    def __init__(self, _destinationDll, _stationName, parentLogger = None):
+        self.destinationDllAddress = _destinationDll
+        self.dllDataTransmission = _stationName + ".dllDataTransmission"
+        self.logger = Logger("DllBinding", True, parentLogger)
+
+class DllListenerBinding(object):
+    nameInBindingFactory = "DllListenerBinding"
+    # the Dll service
+    dllNotification = ".dllNotification"
+    # Dll specific parameters
+    listenDll = None
+    logger = None
+
+    def __init__(self, _listenDll, _stationName, parentLogger = None):
+        self.listenDll = _listenDll
+        self.dllNotification = _stationName + ".dllNotification"
+        self.logger = Logger("DllListenerBinding", True, parentLogger)
+       
+        
 class BindingStub(object):
     nameInBindingFactory = "BindingStub"
     logger = None
@@ -140,7 +193,6 @@ class ConstanzeComponent(openwns.node.Component):
     def __init__(self, _node, _name, parentLogger = None):
         super(ConstanzeComponent, self).__init__(_node, _name)
 
-        #self.logger = wns.Logger.Logger("CONST", "ConstanzeComponent", True, parentLogger)
         self.logger = Logger("Constanze", True, parentLogger)
         self.generators = []
         self.generatorBindings = []

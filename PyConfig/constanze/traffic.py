@@ -26,6 +26,7 @@
 ###############################################################################
 
 import openwns.distribution
+from MMPP import *
 
 class Traffic(object):
     iat = None        # average interarrival time [seconds]
@@ -105,3 +106,159 @@ class ABR(Traffic):
         self.duration = duration
         self.logger = openwns.logger.Logger("CONST", "TrafficGeneratorABR", True, parentLogger)
         #self.logger.level = 2
+        
+# VBR is variable bit rate, e.g. like MPEG2 or VoIP
+# it uses MMPP here (MarkovModulatedPoissonProcess)
+class VBR(Traffic):
+    __plugin__ = "MMPP"
+    numberOfChains  = None # #chains: each chain generates traffic independently
+    rateScale       = None # scale the traffic rate up (>1) or down (<1)
+    transitionScale = None # scale the frequency up (>1) or down (<1)
+    mmppParams      = None # from MMPPparams
+
+    def __init__(self, numberOfChains=None, rateScale=1.0, transitionScale=1.0, offset = 0.0, duration = 0.0, parentLogger = None):
+        self.mmppParams = MMPPMPEG2()
+        if (numberOfChains != None): # no default
+            self.numberOfChains = numberOfChains # given as a parameter (overwrite spec)
+        else: # default
+            self.numberOfChains = self.mmppParams.numberOfChains # take from mmpp specification
+        self.rateScale = rateScale
+        self.transitionScale = transitionScale
+        self.offset = offset # startTime
+        self.duration = duration
+        self.logger = openwns.logger.Logger("CONST", "TrafficGeneratorVBR", True, parentLogger)
+        #self.logger.level = 2
+
+# VoIP Traffic Model
+# This is the simple ON/OFF model specified in the IMT_Advanced TD03 Annex5
+# Basic characteristics:
+# Coder: RTP AMR 12.2
+# source rate: 12.2 kbps (during talkspurt)
+# voice activity factor: 50%
+# discrete time step: 20ms = encoder frame length
+# probability of changing the state: 0.01
+# it uses MMPP here (MarkovModulatedPoissonProcess)
+# @author rs
+class VoIP(Traffic):
+    __plugin__ = "MMPP"
+    numberOfChains  = None # #chains: each chain generates traffic independently
+    rateScale       = None # scale the traffic rate up (>1) or down (<1)
+    transitionScale = None # scale the frequency up (>1) or down (<1)
+    mmppParams      = None # from MMPPparams
+    targetRate      = None # should be unspecified. Use "numberOfChains" to scale traffic up.
+
+    def __init__(self, numberOfChains=1, transitionScale=1.0, offset = 0.0, duration = 0.0, parentLogger = None):
+        self.mmppParams = MMPPVoIP()
+        self.numberOfChains = numberOfChains # models number of parallel voice streams
+        self.rateScale = 1.0
+        self.transitionScale = transitionScale
+        self.offset = offset # startTime
+        self.duration = duration
+        self.logger = openwns.logger.Logger("CONST", "TrafficGeneratorVoIP", True, parentLogger)
+        #self.logger.level = 2
+
+# Self-similar traffic
+# no MMPP in the strong sense
+# see MMPP.py for details of model
+class SelfSimilar(Traffic):
+    __plugin__ = "MMPP"
+    numberOfChains  = None # #chains: each chain generates traffic independently
+    targetRate      = None # (mutual exclusive) alternative to rateScale. Specify the desired mean bit rate [bits/s]
+    rateScale       = None # scale the traffic rate up (>1) or down (<1)
+    transitionScale = None # scale the frequency up (>1) or down (<1)
+    mmppParams      = None # from MMPPparams
+
+    def __init__(self, numberOfChains=None, targetRate=None, rateScale=None, transitionScale=1.0, offset = 0.0, duration = 0.0, parentLogger = None):
+        self.mmppParams = MMPPSelfSimilar() # no MMPP in the strong sense
+        #self.mmppParams = MMPPSelfSimilar(alpha, hurst) # if you want to change the degree of self-similarity
+        if (numberOfChains != None): # no default
+            self.numberOfChains = numberOfChains # given as a parameter (overwrite spec)
+        else: # default
+            self.numberOfChains = self.mmppParams.numberOfChains # take from mmpp specification
+        assert ((rateScale != None) and (targetRate == None)) or ((rateScale == None) and (targetRate != None))
+        if (rateScale != None): # no default
+            self.rateScale = rateScale
+        else: # default
+            self.rateScale = 1.0
+        if (targetRate != None): # no default
+            self.targetRate = targetRate
+            self.rateScale = None
+        else: # default
+            self.targetRate = None
+        self.transitionScale = transitionScale
+        self.offset = offset # startTime
+        self.duration = duration
+        self.logger = openwns.logger.Logger("CONST", "SelfSimilarTrafficGenerator", True, parentLogger)
+        #self.logger.level = 2
+
+# MMPP = MarkovModulatedPoissonProcess
+# @author rs,sgm
+# The helper and parameter classes are in MMPP.py
+class MMPP(Traffic):
+    __plugin__ = "MMPP"
+    numberOfChains  = None # #chains: each chain generates traffic independently
+    targetRate      = None # (mutual exclusive) alternative to rateScale. Specify the desired mean bit rate [bits/s]
+    rateScale       = None # scale the traffic rate up (>1) or down (<1)
+    transitionScale = None # scale the frequency up (>1) or down (<1)
+    mmppParams      = None # from MMPPparams
+
+    def __init__(self, mmppParams, numberOfChains=None, targetRate=None, rateScale=None, transitionScale=1.0, offset = 0.0, duration = 0.0, parentLogger = None):
+        self.mmppParams = mmppParams
+        if (numberOfChains != None): # no default
+            self.numberOfChains = numberOfChains # given as a parameter (overwrite spec)
+            print "MMPP: default overwritten numberOfChains=",self.numberOfChains
+        else: # default
+            self.numberOfChains = mmppParams.numberOfChains # take from mmpp specification
+        assert ((rateScale != None) and (targetRate == None)) or ((rateScale == None) and (targetRate != None))
+        if (rateScale != None): # no default
+            self.rateScale = rateScale
+        else: # default
+            self.rateScale = 1.0
+        if (targetRate != None): # no default
+            self.targetRate = targetRate
+            self.rateScale = None
+        else: # default
+            self.targetRate = None
+        self.transitionScale = transitionScale
+        self.offset = offset # startTime
+        self.duration = duration
+        self.logger = openwns.logger.Logger("CONST", "TrafficGeneratorMMPP", True, parentLogger)
+        #self.logger.level = 2
+
+# DTMMPP = Discrete Time MarkovModulatedPoissonProcess
+# @author rs,sgm
+# The helper and parameter classes are in MMPP.py
+class DTMMPP(Traffic):
+    __plugin__ = "DTMMPP"
+    numberOfChains  = None # #chains: each chain generates traffic independently
+    targetRate      = None # (mutual exclusive) alternative to rateScale. Specify the desired mean bit rate [bits/s]
+    rateScale       = None # scale the traffic rate up (>1) or down (<1)
+    mmppParams      = None # from MMPPparams
+    slotTime        = None # discrete time quantum
+
+    def __init__(self, mmppParams, slotTime=None, numberOfChains=None, targetRate=None, rateScale=None, transitionScale=1.0, offset = 0.0, duration = 0.0, parentLogger = None):
+        self.mmppParams = mmppParams
+        if (slotTime != None): # no default
+            self.slotTime = slotTime
+        else: # default
+            self.slotTime = mmppParams.slotTime # take from mmpp specification
+        if (numberOfChains != None): # no default
+            self.numberOfChains = numberOfChains # given as a parameter (overwrite spec)
+            print "DTMMPP: default overwritten numberOfChains=",self.numberOfChains
+        else: # default
+            self.numberOfChains = mmppParams.numberOfChains # take from mmpp specification
+        if (rateScale != None): # no default
+            self.rateScale = rateScale
+        else: # default
+            self.rateScale = 1.0
+        if (targetRate != None): # no default
+            self.targetRate = targetRate
+            self.rateScale = None
+        else: # default
+            self.targetRate = None
+        self.offset = offset # startTime
+        self.duration = duration
+        self.logger = openwns.logger.Logger("CONST", "TrafficGeneratorDTMMPP", True, parentLogger)
+        #self.logger.level = 2
+
+
