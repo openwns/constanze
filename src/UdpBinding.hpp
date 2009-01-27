@@ -88,7 +88,7 @@ namespace constanze
 
 		constanze::StopTrigger* stopTrigger;
 
-        wns::service::tl::Service* udpService;
+		wns::service::tl::Service* udpService;
 
 		wns::service::tl::ConnectionHandler* connectionHandler;
 
@@ -104,9 +104,11 @@ namespace constanze
 
 		wns::service::tl::Port destinationPort;
 
+		wns::service::qos::QoSClass qosClass;
+
 		virtual std::string	printAddress() const;
 
-        /**
+		/**
 		 * @brief The Logger instance.
 		 */
 		wns::logger::Logger log;

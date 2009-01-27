@@ -136,7 +136,7 @@ void StopTrigger::onTimeout()
 
 void StopTrigger::bindingReady()
 {
- 	generator->bindingReleased();
+	generator->bindingReleased();
 }
 
 /*

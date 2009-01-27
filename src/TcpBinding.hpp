@@ -53,7 +53,6 @@ namespace constanze
 		TcpBinding(const wns::pyconfig::View& _pyco);
 		virtual ~TcpBinding() {};
 
-
 		// from Binding
 		virtual void
 		registerComponent(wns::node::component::Component* _component);
@@ -89,7 +88,7 @@ namespace constanze
 		constanze::StopTrigger* stopTrigger;
 
 		wns::service::tl::Service* tcpService;
-		
+
 		wns::service::tl::ConnectionHandler* connectionHandler;
 
 		wns::service::tl::Connection* connection;
@@ -104,14 +103,15 @@ namespace constanze
 
 		wns::service::tl::Port destinationPort;
 
-		virtual std::string	
+		wns::service::qos::QoSClass qosClass;
+
+		virtual std::string
 		printAddress() const;
 
 		/**
 		 * @brief The Logger instance.
 		 */
 		wns::logger::Logger log;
-		
 	};
 } //constanze
 

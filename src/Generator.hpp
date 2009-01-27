@@ -176,7 +176,7 @@ namespace constanze
 		virtual	~StopTrigger()
 		{}
 
- 		void bindingReady();
+		void bindingReady();
 
 	protected:
 		/**

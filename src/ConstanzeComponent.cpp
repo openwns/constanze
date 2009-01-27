@@ -90,7 +90,7 @@ ConstanzeComponent::onNodeCreated()
 	int numlis=pyco.len("listeners");
 	MESSAGE_SINGLE(NORMAL, log, "onNodeCreated(): initializing " << numgen << " generators, " << numlis << " listeners.");
 
-	// data source
+	// data source (Generators)
 	for (int ii=0; ii < numgen ; ++ii)
 	{
 		// create generator
@@ -123,7 +123,7 @@ ConstanzeComponent::onNodeCreated()
 		generatorBinding->registerComponent(this);
 	}
 
-	// data sink
+	// data sink (Listeners)
 	for (int ii=0; ii < numlis; ++ii)
 	{
 		wns::pyconfig::View listenerView = pyco.get("listeners", ii);

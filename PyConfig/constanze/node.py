@@ -27,6 +27,7 @@
 
 import openwns.node
 import openwns.logger
+import openwns.qos
 from openwns.pyconfig import attrsetter
 
 class Logger(openwns.logger.Logger):
@@ -34,7 +35,7 @@ class Logger(openwns.logger.Logger):
         super(Logger, self).__init__("CONSTANZE", name, enabled, parent, **kw)
         openwns.logger.globalRegistry.addLogger("CONSTANZE", self)
 
-# pack this into Measurement.py:
+# TODO: pack this into Measurement.py:
 class Measurement(object):
     MMPPestimationResultFileName = None
     probeWindow = None
@@ -47,14 +48,14 @@ class Measurement(object):
 
 # the data sink
 class Listener(object):
-    name = None
+    domainName = None
     logger = None
     probeWindow = 1.0 # [s], 1.0 is quite slow, 0.01s=10ms is often reasonable, but may generate a lot of samples
     doMMPPestimation = False
     measurement = None # Measurement()
 
-    def __init__(self, _name, parentLogger = None, **kw):
-        self.name = _name
+    def __init__(self, _domainName, parentLogger = None, **kw):
+        self.domainName = _domainName
         #self.logger = wns.Logger.Logger("CONST", "Listener", True, parentLogger)
         self.logger = Logger("Listener", True, parentLogger)
         measurement = Measurement()
@@ -68,12 +69,14 @@ class UDPBinding(object):
     domainName = None
     destinationDomainName = None
     destinationPort = None
+    qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
         self.domainName = _domainName;
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
+        self.qosClass = qosClass
         #self.logger = wns.Logger.Logger("CONST", "UDPBinding", True, parentLogger)
         self.logger = Logger("UDPBinding", True, parentLogger)
 
@@ -98,12 +101,14 @@ class TCPBinding(object):
     domainName = None
     destinationDomainName = None
     destinationPort = None
+    qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
         self.domainName = _domainName
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
+        self.qosClass = qosClass
         #self.logger = wns.Logger.Logger("CONST", "TCPBinding", True, parentLogger)
         self.logger = Logger("TCPBinding", True, parentLogger)
 

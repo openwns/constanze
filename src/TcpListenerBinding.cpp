@@ -116,9 +116,9 @@ void TcpListenerBinding::onConnectionLost(wns::service::tl::Connection*)
 std::string
 TcpListenerBinding::printAddress() const
 {
-        std::ostringstream tmp;
-        tmp << ownAddress << ":" << listenPort;
-        return tmp.str();
+	std::ostringstream tmp;
+	tmp << ownAddress << ":" << listenPort;
+	return tmp.str();
 }
 
 

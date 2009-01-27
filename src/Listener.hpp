@@ -60,23 +60,21 @@ namespace constanze
 				return key_;
 			}
     private:
-        virtual void
-        doVisit(wns::probe::bus::IContext& c) const
-            {
-                if (newValue_ == true)
-                {
-                    c.insertString(key_, value_);
-                    newValue_ = false;
-                }
-
-            }
-
+		virtual void
+		doVisit(wns::probe::bus::IContext& c) const
+		{
+			if (newValue_ == true)
+				{
+					c.insertString(key_, value_);
+					newValue_ = false;
+				}
+		}
 	};
 
 
 	/** @brief this class receives traffic from the peer */
 	class Listener
-               // : public Probe
+	  // : public Probe
 	{
 	public:
 		Listener( const wns::pyconfig::View& _pyco, wns::node::component::Interface* component);
@@ -90,6 +88,15 @@ namespace constanze
 		void
 		registerBinding(constanze::Binding* _binding);
 
+		virtual std::string printAddress() const;
+
+		friend std::ostream&
+		operator <<(std::ostream& os, const Listener& l)
+		{
+			os << l.printAddress();
+			return os;
+		}
+
 	private:
 		/** @brief Python view */
 		wns::pyconfig::View pyco;
@@ -97,13 +104,16 @@ namespace constanze
 		/** @brief Logger */
 		wns::logger::Logger log;
 
+		/** @brief domainName */
+		std::string domainName;
+
 		/** @brief binding to a socket with ip address */
 		constanze::Binding* binding;
 
 		/**
 		 * @brief class for doing measurements based on rate(time)
 		 */
-	        Measurement* measurement;
+		Measurement* measurement;
 
 		/**
 		 * @brief control step identification
@@ -115,7 +125,7 @@ namespace constanze
 		 */
 		double windowSize;
 
-                /**
+		/**
                  * @brief if true, do estimation of MMPP states. Toggle on in Node.py
                  */
 		bool doMMPPestimation;
@@ -146,7 +156,6 @@ namespace constanze
 		long unsigned int windowedBitCounter;
 		/** @brief time at which the averaging window ends */
 		simTimeType currentWindowEnd;
-
 	};
 }
 

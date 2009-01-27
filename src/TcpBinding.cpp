@@ -30,6 +30,7 @@
 #include <WNS/StaticFactory.hpp>
 #include <WNS/service/nl/Address.hpp>
 #include <WNS/service/tl/PortPool.hpp>
+#include <WNS/service/qos/QoSClasses.hpp>
 #include <WNS/module/Base.hpp>
 
 using namespace constanze;
@@ -45,7 +46,7 @@ TcpBinding::TcpBinding(const wns::pyconfig::View& _pyco):
 	domainName(_pyco.get<std::string>("domainName")),
 	destinationDomainName(_pyco.get<std::string>("destinationDomainName")),
 	destinationPort(_pyco.get<int>("destinationPort")),
-	//log("CONST","TcpBinding",wns::module::Base::getService<wns::logger::Master>("W-NS-MSG"))
+	qosClass(wns::service::qos::QoSClasses::fromString(_pyco.get<std::string>("qosClass"))), // aoz does not support this solution. aoz wanted the qosClass to be a parameter of the generator
 	log(pyco.get("logger"))
 {
 	startTrigger = NULL;
@@ -83,7 +84,7 @@ void TcpBinding::onConnectionEstablished(wns::service::nl::Address, wns::service
 void TcpBinding::initBinding(constanze::StartTrigger* _startTrigger)
 {
 	startTrigger = _startTrigger;
-	tcpService->openConnection( destinationPort, domainName, destinationDomainName, this);
+	tcpService->openConnection( destinationPort, domainName, destinationDomainName, qosClass, this);
 }
 
 void TcpBinding::releaseBinding(constanze::StopTrigger* _stopTrigger)
