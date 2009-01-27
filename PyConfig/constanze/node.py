@@ -167,3 +167,152 @@ class ConstanzeComponent(openwns.node.Component):
         self.listeners.append(_listener)
 
 
+class DllBinding(Sealed):
+    nameInBindingFactory = "DllBinding"
+    # the DLL service
+    dllDataTransmission = None
+    # DLL specific parameters
+    destinationDllAddress = None
+    logger = None
+
+    def __init__(self, _destinationDll, _stationName, parentLogger = None):
+        self.destinationDllAddress = _destinationDll
+        self.dllDataTransmission = _stationName + ".dllDataTransmission"
+        self.logger = Logger("DllBinding", True, parentLogger)
+
+class DllListenerBinding(Sealed):
+    nameInBindingFactory = "DllListenerBinding"
+    # the Dll service
+    dllNotification = ".dllNotification"
+    # Dll specific parameters
+    listenDll = None
+    logger = None
+
+    def __init__(self, _listenDll, _stationName, parentLogger = None):
+        self.listenDll = _listenDll
+        self.dllNotification = _stationName + ".dllNotification"
+        self.logger = Logger("DllListenerBinding", True, parentLogger)
+
+class BasicslBinding(Sealed):
+    nameInBindingFactory = "BasicslBinding"
+    # the session service
+    sessionService = "basicsl.sessionService"
+    # basicsl specific parameters
+    destinationIpAddress = None
+    destinationPort = None
+    logger = None
+
+    def __init__(self, _destinationIP, _destionationPort, parentLogger = None):
+        self.destinationIpAddress = _destinationIP
+        self.destinationPort = _destionationPort
+        self.logger = Logger("BasicslBinding", True, parentLogger)
+
+class BasicslListenerBinding(Sealed):
+    nameInBindingFactory = "BasicslListenerBinding"
+    # the session service
+    sessionService = "basicsl.sessionService"
+    # basicsl specific parameters
+    listenPort = None
+    logger = None
+
+    def __init__(self, _listenPort, parentLogger = None):
+        self.listenPort = _listenPort
+        self.logger = Logger("BasicslListenerBinding", True, parentLogger)
+
+class UDPBinding(Sealed):
+    nameInBindingFactory = "UdpBinding"
+    # the UDP service
+    udpService = "udp.connectionService"
+    # UDP specific parameters
+    domainName = None
+    destinationDomainName = None
+    destinationPort = None
+    qosClass = None
+    logger = None
+
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
+        self.domainName = _domainName;
+        self.destinationDomainName = _destinationDomainName
+        self.destinationPort = _destionationPort
+        self.qosClass = qosClass
+        self.logger = Logger("UDPBinding", True, parentLogger)
+
+class UDPListenerBinding(Sealed):
+    nameInBindingFactory = "UdpListenerBinding"
+    # the UDP service
+    udpService = "udp.connectionService"
+    # UDP specific parameters
+    listenPort = None
+    logger = None
+
+    def __init__(self, _listenPort, parentLogger = None):
+        self.listenPort = _listenPort
+        self.logger = Logger("UDPListenerBinding", True, parentLogger)
+
+class TCPClientBinding(Sealed):
+    nameInBindingFactory = "TcpClientBinding"
+    # the TCP service
+    tcpService = "tcp.connectionService"
+    dnsService = "ip.dns"
+    # TCP specific parameters
+    domainName = None
+    destinationDomainName = None
+    destinationPort = None
+    qosClass = None
+    logger = None
+
+    def __init__(self, _domainName, _destinationDomainName, _destinationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
+        self.domainName = _domainName
+        self.destinationDomainName = _destinationDomainName
+        self.destinationPort = _destinationPort
+        self.qosClass = qosClass
+        self.logger = Logger("TCPClientBinding", True, parentLogger)
+        #print "TCPClientBinding(): qosClass=",self.qosClass
+
+class TCPServerListenerBinding(Sealed):
+    nameInBindingFactory = "TcpServerListenerBinding"
+    # the TCP service
+    tcpService = "tcp.connectionService"
+    dnsService = "ip.dns"
+    # TCP specific parameters
+    listenPort = None
+    logger = None
+    generator = None
+
+    def __init__(self, _listenPort, _generator, parentLogger = None):
+        self.listenPort = _listenPort
+        self.generator = _generator
+        self.logger = Logger("TCPServerListenerBinding", True, parentLogger)
+
+class IPBinding(Sealed):
+    nameInBindingFactory = "IpBinding"
+    # the IP service
+    ipDataTransmission = "ip.dataTransmission"
+
+    dnsService = "ip.dns"
+
+    # IP specific parameters
+    sourceDomainName = None
+
+    destinationDomainName = None
+
+    logger = None
+
+    def __init__(self, _sourceDomainName, _destinationDomainName, parentLogger = None):
+        self.sourceDomainName = _sourceDomainName
+        self.destinationDomainName = _destinationDomainName
+        self.logger = Logger("IPBinding", True, parentLogger)
+
+class IPListenerBinding(Sealed):
+    nameInBindingFactory = "IpListenerBinding"
+    # the IP service
+    ipNotification = "ip.notification"
+    # IP specific parameters
+    listenDomainName = None
+    logger = None
+
+    def __init__(self, _listenDomainName, parentLogger = None):
+        self.listenDomainName = _listenDomainName
+        self.logger = Logger("IPListenerBinding", True, parentLogger)
+
+

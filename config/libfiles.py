@@ -12,7 +12,19 @@ srcFiles = [
     'src/TcpListenerBinding.cpp',
     'src/HMM.cpp',
     'src/BaumWelch.cpp',
-    'src/Measurement.cpp'
+    'src/Measurement.cpp',
+    'src/GeneratorMMPP.cpp',
+    'src/GeneratorDTMMPP.cpp',
+    'src/GeneratorARMA.cpp',
+    'src/SubGenerator.cpp',
+    'src/IpBinding.cpp',
+    'src/IpListenerBinding.cpp',
+    'src/DllBinding.cpp',
+    'src/DllListenerBinding.cpp',
+    'src/tests/GeneratorTest.cpp',
+    'src/tests/MMPPTest.cpp',
+    'src/tests/ARMATest.cpp',
+    'src/tests/MeasurementTest.cpp'
 ]
 hppFiles = [
     'src/BaumWelch.hpp',
@@ -29,6 +41,15 @@ hppFiles = [
     'src/TcpListenerBinding.hpp',
     'src/UdpBinding.hpp',
     'src/UdpListenerBinding.hpp',
+    'src/DllBinding.hpp',
+    'src/DllListenerBinding.hpp',
+    'src/GeneratorARMA.hpp',
+    'src/GeneratorDTMMPP.hpp',
+    'src/GeneratorMMPP.hpp',
+    'src/IpBinding.hpp',
+    'src/IpListenerBinding.hpp',
+    'src/SubGenerator.hpp',
+    'src/tests/GeneratorTest.hpp',
 ]
 pyconfigs = [
     'constanze/__init__.py',
@@ -38,7 +59,9 @@ pyconfigs = [
     'constanze/evaluation/default.py',
     'constanze/module.py',
     'constanze/node.py',
-    'constanze/traffic.py'
+    'constanze/traffic.py',
+    'constanze/MMPP.py',
+    'constanze/ARMA.py',
 ]
 dependencies = []
 Return('libname srcFiles hppFiles pyconfigs dependencies')
