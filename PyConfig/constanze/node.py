@@ -167,7 +167,7 @@ class ConstanzeComponent(openwns.node.Component):
         self.listeners.append(_listener)
 
 
-class DllBinding(Sealed):
+class DllBinding(object):
     nameInBindingFactory = "DllBinding"
     # the DLL service
     dllDataTransmission = None
@@ -180,7 +180,7 @@ class DllBinding(Sealed):
         self.dllDataTransmission = _stationName + ".dllDataTransmission"
         self.logger = Logger("DllBinding", True, parentLogger)
 
-class DllListenerBinding(Sealed):
+class DllListenerBinding(object):
     nameInBindingFactory = "DllListenerBinding"
     # the Dll service
     dllNotification = ".dllNotification"
@@ -193,7 +193,7 @@ class DllListenerBinding(Sealed):
         self.dllNotification = _stationName + ".dllNotification"
         self.logger = Logger("DllListenerBinding", True, parentLogger)
 
-class BasicslBinding(Sealed):
+class BasicslBinding(object):
     nameInBindingFactory = "BasicslBinding"
     # the session service
     sessionService = "basicsl.sessionService"
@@ -207,7 +207,7 @@ class BasicslBinding(Sealed):
         self.destinationPort = _destionationPort
         self.logger = Logger("BasicslBinding", True, parentLogger)
 
-class BasicslListenerBinding(Sealed):
+class BasicslListenerBinding(object):
     nameInBindingFactory = "BasicslListenerBinding"
     # the session service
     sessionService = "basicsl.sessionService"
@@ -219,7 +219,7 @@ class BasicslListenerBinding(Sealed):
         self.listenPort = _listenPort
         self.logger = Logger("BasicslListenerBinding", True, parentLogger)
 
-class UDPBinding(Sealed):
+class UDPBinding(object):
     nameInBindingFactory = "UdpBinding"
     # the UDP service
     udpService = "udp.connectionService"
@@ -237,7 +237,7 @@ class UDPBinding(Sealed):
         self.qosClass = qosClass
         self.logger = Logger("UDPBinding", True, parentLogger)
 
-class UDPListenerBinding(Sealed):
+class UDPListenerBinding(object):
     nameInBindingFactory = "UdpListenerBinding"
     # the UDP service
     udpService = "udp.connectionService"
@@ -249,7 +249,7 @@ class UDPListenerBinding(Sealed):
         self.listenPort = _listenPort
         self.logger = Logger("UDPListenerBinding", True, parentLogger)
 
-class TCPClientBinding(Sealed):
+class TCPClientBinding(object):
     nameInBindingFactory = "TcpClientBinding"
     # the TCP service
     tcpService = "tcp.connectionService"
@@ -269,7 +269,7 @@ class TCPClientBinding(Sealed):
         self.logger = Logger("TCPClientBinding", True, parentLogger)
         #print "TCPClientBinding(): qosClass=",self.qosClass
 
-class TCPServerListenerBinding(Sealed):
+class TCPServerListenerBinding(object):
     nameInBindingFactory = "TcpServerListenerBinding"
     # the TCP service
     tcpService = "tcp.connectionService"
@@ -284,7 +284,7 @@ class TCPServerListenerBinding(Sealed):
         self.generator = _generator
         self.logger = Logger("TCPServerListenerBinding", True, parentLogger)
 
-class IPBinding(Sealed):
+class IPBinding(object):
     nameInBindingFactory = "IpBinding"
     # the IP service
     ipDataTransmission = "ip.dataTransmission"
@@ -303,7 +303,7 @@ class IPBinding(Sealed):
         self.destinationDomainName = _destinationDomainName
         self.logger = Logger("IPBinding", True, parentLogger)
 
-class IPListenerBinding(Sealed):
+class IPListenerBinding(object):
     nameInBindingFactory = "IpListenerBinding"
     # the IP service
     ipNotification = "ip.notification"
