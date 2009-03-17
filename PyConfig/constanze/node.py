@@ -56,7 +56,6 @@ class Listener(object):
 
     def __init__(self, _domainName, parentLogger = None, **kw):
         self.domainName = _domainName
-        #self.logger = wns.Logger.Logger("CONST", "Listener", True, parentLogger)
         self.logger = Logger("Listener", True, parentLogger)
         measurement = Measurement()
         attrsetter(self, kw)
@@ -77,7 +76,6 @@ class UDPBinding(object):
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
         self.qosClass = qosClass
-        #self.logger = wns.Logger.Logger("CONST", "UDPBinding", True, parentLogger)
         self.logger = Logger("UDPBinding", True, parentLogger)
 
 class UDPListenerBinding(object):
@@ -90,7 +88,6 @@ class UDPListenerBinding(object):
 
     def __init__(self, _listenPort, parentLogger = None):
         self.listenPort = _listenPort
-        #self.logger = wns.Logger.Logger("CONST", "UDPListenerBinding", True, parentLogger)
         self.logger = Logger("UDPListenerBinding", True, parentLogger)
 
 class TCPBinding(object):
@@ -109,7 +106,6 @@ class TCPBinding(object):
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
         self.qosClass = qosClass
-        #self.logger = wns.Logger.Logger("CONST", "TCPBinding", True, parentLogger)
         self.logger = Logger("TCPBinding", True, parentLogger)
 
 class TCPListenerBinding(object):
@@ -122,7 +118,6 @@ class TCPListenerBinding(object):
 
     def __init__(self, _listenPort, parentLogger = None):
         self.listenPort = _listenPort
-        #self.logger = wns.Logger.Logger("CONST", "TCPListenerBinding", True, parentLogger)
         self.logger = Logger("TCPListenerBinding", True, parentLogger)
 
 class BindingStub(object):
@@ -144,8 +139,6 @@ class ConstanzeComponent(openwns.node.Component):
 
     def __init__(self, _node, _name, parentLogger = None):
         super(ConstanzeComponent, self).__init__(_node, _name)
-
-        #self.logger = wns.Logger.Logger("CONST", "ConstanzeComponent", True, parentLogger)
         self.logger = Logger("Constanze", True, parentLogger)
         self.generators = []
         self.generatorBindings = []
@@ -165,7 +158,6 @@ class ConstanzeComponent(openwns.node.Component):
     def addListener(self, _binding, _listener) :
         self.listenerBindings.append(_binding)
         self.listeners.append(_listener)
-
 
 class DllBinding(object):
     nameInBindingFactory = "DllBinding"
@@ -192,32 +184,6 @@ class DllListenerBinding(object):
         self.listenDll = _listenDll
         self.dllNotification = _stationName + ".dllNotification"
         self.logger = Logger("DllListenerBinding", True, parentLogger)
-
-class BasicslBinding(object):
-    nameInBindingFactory = "BasicslBinding"
-    # the session service
-    sessionService = "basicsl.sessionService"
-    # basicsl specific parameters
-    destinationIpAddress = None
-    destinationPort = None
-    logger = None
-
-    def __init__(self, _destinationIP, _destionationPort, parentLogger = None):
-        self.destinationIpAddress = _destinationIP
-        self.destinationPort = _destionationPort
-        self.logger = Logger("BasicslBinding", True, parentLogger)
-
-class BasicslListenerBinding(object):
-    nameInBindingFactory = "BasicslListenerBinding"
-    # the session service
-    sessionService = "basicsl.sessionService"
-    # basicsl specific parameters
-    listenPort = None
-    logger = None
-
-    def __init__(self, _listenPort, parentLogger = None):
-        self.listenPort = _listenPort
-        self.logger = Logger("BasicslListenerBinding", True, parentLogger)
 
 class UDPBinding(object):
     nameInBindingFactory = "UdpBinding"
@@ -267,7 +233,6 @@ class TCPClientBinding(object):
         self.destinationPort = _destinationPort
         self.qosClass = qosClass
         self.logger = Logger("TCPClientBinding", True, parentLogger)
-        #print "TCPClientBinding(): qosClass=",self.qosClass
 
 class TCPServerListenerBinding(object):
     nameInBindingFactory = "TcpServerListenerBinding"
@@ -288,14 +253,10 @@ class IPBinding(object):
     nameInBindingFactory = "IpBinding"
     # the IP service
     ipDataTransmission = "ip.dataTransmission"
-
     dnsService = "ip.dns"
-
     # IP specific parameters
     sourceDomainName = None
-
     destinationDomainName = None
-
     logger = None
 
     def __init__(self, _sourceDomainName, _destinationDomainName, parentLogger = None):
