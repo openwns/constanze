@@ -60,23 +60,23 @@ GeneratorBase::~GeneratorBase()
 void GeneratorBase::registerBinding(constanze::Binding* _binding)
 {
 	binding = _binding;
-	double offset = pyco.get<simTimeType>("offset");
-	startTrigger = new constanze::StartTrigger(binding, this, offset);
+	double offset   = pyco.get<simTimeType>("offset");
 	double duration = pyco.get<simTimeType>("duration");
+	MESSAGE_SINGLE(NORMAL, log, "registerBinding(@offset="<<offset<<"s for duration="<<duration<<"s)");
+	startTrigger = new constanze::StartTrigger(binding, this, offset);
 	// duration==0 means infinite
 	if (duration != 0.0)
 		stopTrigger = new constanze::StopTrigger(binding, this, offset + duration);
 }
 
-
 void GeneratorBase::bindingReady()
 {
 	start();
 	assure(startTrigger!=NULL,"no startTrigger");
+	MESSAGE_SINGLE(NORMAL, log, "bindingReady()");
 	delete startTrigger;
 	startTrigger = NULL;
 }
-
 
 void
 GeneratorBase::bindingReleased()
