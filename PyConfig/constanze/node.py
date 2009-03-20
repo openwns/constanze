@@ -63,7 +63,7 @@ class Listener(object):
 class UDPBinding(object):
     nameInBindingFactory = "UdpBinding"
     # the UDP service
-    udpService = "udp.connectionService"
+    udpService = "tcp.connectionService"
     # UDP specific parameters
     domainName = None
     destinationDomainName = None
@@ -81,7 +81,7 @@ class UDPBinding(object):
 class UDPListenerBinding(object):
     nameInBindingFactory = "UdpListenerBinding"
     # the UDP service
-    udpService = "udp.connectionService"
+    udpService = "tcp.connectionService"
     # UDP specific parameters
     listenPort = None
     logger = None
@@ -188,7 +188,7 @@ class DllListenerBinding(object):
 class UDPBinding(object):
     nameInBindingFactory = "UdpBinding"
     # the UDP service
-    udpService = "udp.connectionService"
+    udpService = "tcp.connectionService"
     # UDP specific parameters
     domainName = None
     destinationDomainName = None
@@ -206,7 +206,7 @@ class UDPBinding(object):
 class UDPListenerBinding(object):
     nameInBindingFactory = "UdpListenerBinding"
     # the UDP service
-    udpService = "udp.connectionService"
+    udpService = "tcp.connectionService"
     # UDP specific parameters
     listenPort = None
     logger = None
