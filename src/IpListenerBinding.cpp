@@ -45,7 +45,6 @@ IpListenerBinding::IpListenerBinding(const wns::pyconfig::View& _pyco):
 	ipNotification(NULL),
 	listener(NULL),
 	listenDomainName(pyco.get<std::string>("listenDomainName")),
-	//log("CONST","IpListenerBinding",wns::module::Base::getService<wns::logger::Master>("W-NS-MSG"))
 	log(pyco.get("logger"))
 {
 	MESSAGE_BEGIN(NORMAL, log, m, "New IpListenerBinding created for own IP=");
@@ -96,8 +95,8 @@ void IpListenerBinding::releaseBinding(constanze::StopTrigger* _trigger)
 
 std::string	IpListenerBinding::printAddress() const
 {
-        std::ostringstream tmp;
-        tmp << listenDomainName;
-        return tmp.str();
+	std::ostringstream tmp;
+	tmp << listenDomainName;
+	return tmp.str();
 }
 

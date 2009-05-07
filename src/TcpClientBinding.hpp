@@ -1,36 +1,21 @@
-/*******************************************************************************
- * This file is part of openWNS (open Wireless Network Simulator)
- * _____________________________________________________________________________
- *
- * Copyright (C) 2004-2007
- * Chair of Communication Networks (ComNets)
- * Kopernikusstr. 16, D-52074 Aachen, Germany
- * phone: ++49-241-80-27910,
- * fax: ++49-241-80-22242
- * email: info@openwns.org
- * www: http://www.openwns.org
- * _____________________________________________________________________________
- *
- * openWNS is free software; you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License version 2 as published by the
- * Free Software Foundation;
- *
- * openWNS is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+/******************************************************************************
+ * TCP Binding                                                                *
+ * __________________________________________________________________________ *
+ *                                                                            *
+ * Copyright (C) 2005                                                         *
+ * Lehrstuhl fuer Kommunikationsnetze (ComNets)                               *
+ * Kopernikusstr. 16, D-52074 Aachen, Germany                                 *
+ * phone: ++49-241-80-27910 (phone), fax: ++49-241-80-22242                   *
+ * email: wns@comnetsrwth-aachen.de, www: http://wns.comnets.rwth-aachen.de/  *
  ******************************************************************************/
 
-#ifndef CONSTANZE_TCPBINDING_HPP
-#define CONSTANZE_TCPBINDING_HPP
+#ifndef CONSTANZE_TCPCLIENTBINDING_HPP
+#define CONSTANZE_TCPCLIENTBINDING_HPP
 
-#include <CONSTANZE/Binding.hpp>
+#include <CONSTANZE/TcpBinding.hpp>
 #include <CONSTANZE/Generator.hpp>
 
+#include <WNS/service/nl/Service.hpp>
 #include <WNS/service/nl/Address.hpp>
 #include <WNS/service/tl/Service.hpp>
 #include <WNS/service/tl/ConnectionHandler.hpp>
@@ -45,13 +30,14 @@
 
 namespace constanze
 {
-	class TcpBinding:
+	class TcpClientBinding:
 		public Binding,
-		public wns::service::tl::ConnectionHandler
+		public wns::service::tl::ConnectionHandler,
+		public wns::service::tl::DataHandler
 	{
 	public:
-		TcpBinding(const wns::pyconfig::View& _pyco);
-		virtual ~TcpBinding() {};
+		TcpClientBinding(const wns::pyconfig::View& _pyco);
+		~TcpClientBinding();
 
 		// from Binding
 		virtual void
@@ -67,7 +53,7 @@ namespace constanze
 		releaseBinding(constanze::StopTrigger* _stopTrigger);
 
 		virtual void
-		registerListener(constanze::Listener* _listener);
+		registerListener(constanze::Listener*);
 
 		// from ConnectionHandler
 		virtual void
@@ -82,27 +68,26 @@ namespace constanze
 		virtual void
 		onConnectionLost(wns::service::tl::Connection* _connection);
 
+		// from DataHandler
+		virtual void
+		onData(const wns::osi::PDUPtr& _pdu);
+
     protected:
 		constanze::StartTrigger* startTrigger;
-
 		constanze::StopTrigger* stopTrigger;
-
-		wns::service::tl::Service* tcpService;
-
-		wns::service::tl::ConnectionHandler* connectionHandler;
-
-		wns::service::tl::Connection* connection;
 
 		wns::node::component::Component* component;
 
 		wns::pyconfig::View pyco;
 
+		wns::service::nl::DNSService* dns;
 		wns::service::nl::FQDN domainName;
-
 		wns::service::nl::FQDN destinationDomainName;
-
+		wns::service::nl::Address peerAddress;
 		wns::service::tl::Port destinationPort;
-
+		wns::service::tl::Service* tcpService;
+		wns::service::tl::ConnectionHandler* connectionHandler;
+		wns::service::tl::Connection* connection;
 		wns::service::qos::QoSClass qosClass;
 
 		virtual std::string
@@ -112,6 +97,12 @@ namespace constanze
 		 * @brief The Logger instance.
 		 */
 		wns::logger::Logger log;
+
+		/** @brief count packets */
+		long unsigned int packetCounter;
+
+		/** @brief count bits */
+		long unsigned int bitCounter;
 	};
 } //constanze
 

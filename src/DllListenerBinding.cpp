@@ -63,7 +63,7 @@ void DllListenerBinding::registerComponent(wns::node::component::Component* _com
 	dllNotification->registerHandler(wns::service::dll::CONSTANZE, this);
 }
 
-void DllListenerBinding::onData(const wns::osi::PDUPtr& _data)
+void DllListenerBinding::onData(const wns::osi::PDUPtr& _data, wns::service::dll::FlowID /*dllFlowID*/)
 {
 	assure(listener, "No listener set.");
 	MESSAGE_BEGIN(NORMAL, log, m, "Received " << _data->getLengthInBits()/8 << " bytes"); // "from ?"

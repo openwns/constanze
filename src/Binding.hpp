@@ -72,7 +72,7 @@ namespace constanze
 
 		friend std::ostream&
 		operator <<(std::ostream& os, const Binding& b)
-        {
+		{
 			os << b.printAddress();
 			return os;
 		}

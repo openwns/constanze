@@ -45,7 +45,7 @@ UdpBinding::UdpBinding(const wns::pyconfig::View& _pyco):
 	domainName(_pyco.get<std::string>("domainName")),
 	destinationDomainName(_pyco.get<std::string>("destinationDomainName")),
 	destinationPort(_pyco.get<int>("destinationPort")),
-	//log("CONST","UdpBinding",wns::module::Base::getService<wns::logger::Master>("W-NS-MSG"))
+	qosClass(wns::service::qos::QoSClasses::fromString(_pyco.get<std::string>("qosClass"))), // aoz does not support this solution. aoz wanted the qosClass to be a parameter of the generator
 	log(pyco.get("logger"))
 {
 	startTrigger = NULL;
@@ -84,7 +84,7 @@ void UdpBinding::initBinding(constanze::StartTrigger* _startTrigger)
 {
 	startTrigger = _startTrigger;
 	MESSAGE_SINGLE(NORMAL, log, "initBinding(): Opening UDP connection to " << destinationDomainName << ":" << destinationPort << " from " << domainName);
-	udpService->openConnection( destinationPort, domainName, destinationDomainName, this);
+	udpService->openConnection( destinationPort, domainName, destinationDomainName, qosClass, this);
 }
 
 void UdpBinding::releaseBinding(constanze::StopTrigger* _stopTrigger)
@@ -116,9 +116,9 @@ void UdpBinding::onConnectionLost(wns::service::tl::Connection*)
 
 std::string	UdpBinding::printAddress() const
 {
-        std::ostringstream tmp;
-        tmp << destinationDomainName << ":" << destinationPort;
-        return tmp.str();
+	std::ostringstream tmp;
+	tmp << destinationDomainName << ":" << destinationPort;
+	return tmp.str();
 }
 
 

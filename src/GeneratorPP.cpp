@@ -108,14 +108,17 @@ void GeneratorPP::start()
 		double iat = (*interArrivalTimeDistribution)();
 		double firstiat = wns::distribution::forwardRecurrenceTime(iat);
 		setTimeout(firstiat);
+		MESSAGE_SINGLE(NORMAL, log, "start() after firstiat="<<firstiat<<"s");
 	} else {
 		setTimeout(0.0); // first packet generated at once.
+		MESSAGE_SINGLE(NORMAL, log, "start() now");
 	}
 }
 
 void GeneratorPP::stop()
 {
 	cancelTimeout();
+	MESSAGE_SINGLE(NORMAL, log, "stop()");
 }
 
 /*

@@ -66,7 +66,7 @@ namespace constanze
 
 		// from DataHandler
 		virtual void
-		onData(const wns::osi::PDUPtr& _data);
+		onData(const wns::osi::PDUPtr& _data, wns::service::dll::FlowID /*dllFlowID*/);
 
 	protected:
 		wns::node::component::Component* component;

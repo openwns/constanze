@@ -27,6 +27,7 @@
 
 import openwns.node
 import openwns.logger
+import openwns.qos
 from openwns.pyconfig import attrsetter
 
 class Logger(openwns.logger.Logger):
@@ -34,7 +35,7 @@ class Logger(openwns.logger.Logger):
         super(Logger, self).__init__("CONSTANZE", name, enabled, parent, **kw)
         openwns.logger.globalRegistry.addLogger("CONSTANZE", self)
 
-# pack this into Measurement.py:
+# TODO: pack this into Measurement.py:
 class Measurement(object):
     MMPPestimationResultFileName = None
     probeWindow = None
@@ -47,14 +48,14 @@ class Measurement(object):
 
 # the data sink
 class Listener(object):
-    name = None
+    domainName = None
     logger = None
     probeWindow = 1.0 # [s], 1.0 is quite slow, 0.01s=10ms is often reasonable, but may generate a lot of samples
     doMMPPestimation = False
     measurement = None # Measurement()
 
-    def __init__(self, _name, parentLogger = None, **kw):
-        self.name = _name
+    def __init__(self, _domainName, parentLogger = None, **kw):
+        self.domainName = _domainName
         self.logger = Logger("Listener", True, parentLogger)
         measurement = Measurement()
         attrsetter(self, kw)
@@ -62,23 +63,25 @@ class Listener(object):
 class UDPBinding(object):
     nameInBindingFactory = "UdpBinding"
     # the UDP service
-    udpService = "udp.connectionService"
+    udpService = "tcp.connectionService"
     # UDP specific parameters
     domainName = None
     destinationDomainName = None
     destinationPort = None
+    qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
         self.domainName = _domainName;
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
+        self.qosClass = qosClass
         self.logger = Logger("UDPBinding", True, parentLogger)
 
 class UDPListenerBinding(object):
     nameInBindingFactory = "UdpListenerBinding"
     # the UDP service
-    udpService = "udp.connectionService"
+    udpService = "tcp.connectionService"
     # UDP specific parameters
     listenPort = None
     logger = None
@@ -95,12 +98,14 @@ class TCPBinding(object):
     domainName = None
     destinationDomainName = None
     destinationPort = None
+    qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
         self.domainName = _domainName
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
+        self.qosClass = qosClass
         self.logger = Logger("TCPBinding", True, parentLogger)
 
 class TCPListenerBinding(object):
@@ -115,37 +120,45 @@ class TCPListenerBinding(object):
         self.listenPort = _listenPort
         self.logger = Logger("TCPListenerBinding", True, parentLogger)
 
-class IPBinding(object):
-    nameInBindingFactory = "IpBinding"
-    # the IP service
-    ipDataTransmission = "ip.dataTransmission"
-
-    dnsService = "ip.dns"
-
-    # IP specific parameters
-    sourceDomainName = None
-
-    destinationDomainName = None
-
+class BindingStub(object):
+    nameInBindingFactory = "BindingStub"
     logger = None
+    
+    def __init__(self):
+        self.logger = Logger("BindingStub", False, None)
 
-    def __init__(self, _sourceDomainName, _destinationDomainName, parentLogger = None):
-        self.sourceDomainName = _sourceDomainName
-        self.destinationDomainName = _destinationDomainName
-        self.logger = Logger("IPBinding", True, parentLogger)
+class ConstanzeComponent(openwns.node.Component):
 
-class IPListenerBinding(object):
-    nameInBindingFactory = "IpListenerBinding"
-    # the IP service
-    ipNotification = "ip.notification"
-    # IP specific parameters
-    listenDomainName = None
+    nameInComponentFactory = "Constanze"
     logger = None
+    generatorBindings = None
+    generators = None # list of generators. A generator is a derived "class Traffic" object, see Constanze.py
+    listenerBindings = None
+    listeners = None
+    __countGenerators__ = 0
 
-    def __init__(self, _listenDomainName, parentLogger = None):
-        self.listenDomainName = _listenDomainName
-        self.logger = Logger("IPListenerBinding", True, parentLogger)
-        
+    def __init__(self, _node, _name, parentLogger = None):
+        super(ConstanzeComponent, self).__init__(_node, _name)
+        self.logger = Logger("Constanze", True, parentLogger)
+        self.generators = []
+        self.generatorBindings = []
+        self.listeners = []
+        self.listenerBindings = []
+
+    def addTraffic(self, _binding, _generator) :
+        self.generatorBindings.append(_binding)
+        self.generators.append(_generator)
+        indexString = "[" +("%d" % self.__countGenerators__) + "]"
+        loggerName = _binding.logger.name.split(".")[-1]
+        _binding.logger.name = loggerName + indexString
+        loggerName = _generator.logger.name.split(".")[-1]
+        _generator.logger.name = loggerName + indexString
+        self.__countGenerators__ += 1
+
+    def addListener(self, _binding, _listener) :
+        self.listenerBindings.append(_binding)
+        self.listeners.append(_listener)
+
 class DllBinding(object):
     nameInBindingFactory = "DllBinding"
     # the DLL service
@@ -171,46 +184,96 @@ class DllListenerBinding(object):
         self.listenDll = _listenDll
         self.dllNotification = _stationName + ".dllNotification"
         self.logger = Logger("DllListenerBinding", True, parentLogger)
-       
-        
-class BindingStub(object):
-    nameInBindingFactory = "BindingStub"
+
+class UDPBinding(object):
+    nameInBindingFactory = "UdpBinding"
+    # the UDP service
+    udpService = "tcp.connectionService"
+    # UDP specific parameters
+    domainName = None
+    destinationDomainName = None
+    destinationPort = None
+    qosClass = None
     logger = None
-    
-    def __init__(self):
-        self.logger = Logger("BindingStub", False, None)
 
-class ConstanzeComponent(openwns.node.Component):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
+        self.domainName = _domainName;
+        self.destinationDomainName = _destinationDomainName
+        self.destinationPort = _destionationPort
+        self.qosClass = qosClass
+        self.logger = Logger("UDPBinding", True, parentLogger)
 
-    nameInComponentFactory = "Constanze"
+class UDPListenerBinding(object):
+    nameInBindingFactory = "UdpListenerBinding"
+    # the UDP service
+    udpService = "tcp.connectionService"
+    # UDP specific parameters
+    listenPort = None
     logger = None
-    generatorBindings = None
-    generators = None # list of generators. A generator is a derived "class Traffic" object, see Constanze.py
-    listenerBindings = None
-    listeners = None
-    __countGenerators__ = 0
 
-    def __init__(self, _node, _name, parentLogger = None):
-        super(ConstanzeComponent, self).__init__(_node, _name)
+    def __init__(self, _listenPort, parentLogger = None):
+        self.listenPort = _listenPort
+        self.logger = Logger("UDPListenerBinding", True, parentLogger)
 
-        self.logger = Logger("Constanze", True, parentLogger)
-        self.generators = []
-        self.generatorBindings = []
-        self.listeners = []
-        self.listenerBindings = []
+class TCPClientBinding(object):
+    nameInBindingFactory = "TcpClientBinding"
+    # the TCP service
+    tcpService = "tcp.connectionService"
+    dnsService = "ip.dns"
+    # TCP specific parameters
+    domainName = None
+    destinationDomainName = None
+    destinationPort = None
+    qosClass = None
+    logger = None
 
-    def addTraffic(self, _binding, _generator) :
-        self.generatorBindings.append(_binding)
-        self.generators.append(_generator)
-        indexString = "[" +("%d" % self.__countGenerators__) + "]"
-        loggerName = _binding.logger.name.split(".")[-1]
-        _binding.logger.name = loggerName + indexString
-        loggerName = _generator.logger.name.split(".")[-1]
-        _generator.logger.name = loggerName + indexString
-        self.__countGenerators__ += 1
+    def __init__(self, _domainName, _destinationDomainName, _destinationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
+        self.domainName = _domainName
+        self.destinationDomainName = _destinationDomainName
+        self.destinationPort = _destinationPort
+        self.qosClass = qosClass
+        self.logger = Logger("TCPClientBinding", True, parentLogger)
 
-    def addListener(self, _binding, _listener) :
-        self.listenerBindings.append(_binding)
-        self.listeners.append(_listener)
+class TCPServerListenerBinding(object):
+    nameInBindingFactory = "TcpServerListenerBinding"
+    # the TCP service
+    tcpService = "tcp.connectionService"
+    dnsService = "ip.dns"
+    # TCP specific parameters
+    listenPort = None
+    logger = None
+    generator = None
+
+    def __init__(self, _listenPort, _generator, parentLogger = None):
+        self.listenPort = _listenPort
+        self.generator = _generator
+        self.logger = Logger("TCPServerListenerBinding", True, parentLogger)
+
+class IPBinding(object):
+    nameInBindingFactory = "IpBinding"
+    # the IP service
+    ipDataTransmission = "ip.dataTransmission"
+    dnsService = "ip.dns"
+    # IP specific parameters
+    sourceDomainName = None
+    destinationDomainName = None
+    logger = None
+
+    def __init__(self, _sourceDomainName, _destinationDomainName, parentLogger = None):
+        self.sourceDomainName = _sourceDomainName
+        self.destinationDomainName = _destinationDomainName
+        self.logger = Logger("IPBinding", True, parentLogger)
+
+class IPListenerBinding(object):
+    nameInBindingFactory = "IpListenerBinding"
+    # the IP service
+    ipNotification = "ip.notification"
+    # IP specific parameters
+    listenDomainName = None
+    logger = None
+
+    def __init__(self, _listenDomainName, parentLogger = None):
+        self.listenDomainName = _listenDomainName
+        self.logger = Logger("IPListenerBinding", True, parentLogger)
 
 

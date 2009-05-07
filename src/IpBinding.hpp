@@ -52,7 +52,7 @@ namespace constanze
 		registerComponent(wns::node::component::Component* _component);
 
 		virtual void
- 		sendData(const wns::osi::PDUPtr& _data);
+		sendData(const wns::osi::PDUPtr& _data);
 
 		virtual void
 		initBinding(constanze::StartTrigger* startTrigger);
@@ -66,18 +66,16 @@ namespace constanze
 	protected:
 		wns::node::component::Component* component;
 
-                /**
+		/**
 		 * @brief The configuration
 		 */
 		wns::pyconfig::View pyco;
 
 		wns::service::nl::Service* ipDataTransmission;
 
-                wns::service::nl::DNSService* dns;
-
-	        wns::service::nl::FQDN sourceDomainName;
-
-	        wns::service::nl::FQDN destinationDomainName;
+		wns::service::nl::DNSService* dns;
+		wns::service::nl::FQDN sourceDomainName;
+		wns::service::nl::FQDN destinationDomainName;
 
 		virtual std::string printAddress() const;
 

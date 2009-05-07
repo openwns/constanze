@@ -66,9 +66,10 @@ void IpBinding::registerComponent(wns::node::component::Component* _component)
 }
 
 void IpBinding::sendData(const wns::osi::PDUPtr& _data){
-  wns::service::nl::Address sourceIpAddress(dns->lookup(sourceDomainName));
-  wns::service::nl::Address destinationIpAddress(dns->lookup(destinationDomainName));
-  ipDataTransmission->sendData(sourceIpAddress, destinationIpAddress, _data, wns::service::nl::Constanze);
+	assure(dns!=NULL,"dns needed");
+	wns::service::nl::Address sourceIpAddress(dns->lookup(sourceDomainName));
+	wns::service::nl::Address destinationIpAddress(dns->lookup(destinationDomainName));
+	ipDataTransmission->sendData(sourceIpAddress, destinationIpAddress, _data, wns::service::nl::Constanze);
 }
 
 void IpBinding::registerListener(constanze::Listener*)
@@ -88,7 +89,7 @@ void IpBinding::releaseBinding(constanze::StopTrigger* _stopTrigger)
 
 std::string IpBinding::printAddress() const
 {
-        std::ostringstream tmp;
-        tmp << destinationDomainName;
-        return tmp.str();
+	std::ostringstream tmp;
+	tmp << destinationDomainName;
+	return tmp.str();
 }
