@@ -71,7 +71,7 @@ class UDPBinding(object):
     qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.backgroundQosClass, parentLogger = None):
         self.domainName = _domainName;
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
@@ -101,7 +101,7 @@ class TCPBinding(object):
     qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.backgroundQosClass, parentLogger = None):
         self.domainName = _domainName
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
@@ -196,7 +196,7 @@ class UDPBinding(object):
     qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.backgroundQosClass, parentLogger = None):
         self.domainName = _domainName;
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
@@ -227,7 +227,7 @@ class TCPClientBinding(object):
     qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destinationPort, qosClass = openwns.qos.bestEffortQosClass, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destinationPort, qosClass = openwns.qos.backgroundQosClass, parentLogger = None):
         self.domainName = _domainName
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destinationPort
