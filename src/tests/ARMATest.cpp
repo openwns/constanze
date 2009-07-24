@@ -373,8 +373,8 @@ void ARMATest::testData()
 	CPPUNIT_ASSERT(testGeneratorMMPP->countedPackets() < it);
 	CPPUNIT_ASSERT(testGeneratorMMPP->countedBits() > minTrafficRate  * trafficDuration);
 	CPPUNIT_ASSERT(testGeneratorMMPP->countedBits() < maxTrafficRate  * trafficDuration);
-	// traffic is very bursty (and self-similar), so 40% tolerance needed:
-	WNS_ASSERT_MAX_REL_ERROR(meanTrafficRate * trafficDuration, static_cast<double>(testGeneratorMMPP->countedBits()), 0.4);
+	// traffic is very bursty (and self-similar), so 70% tolerance needed:
+	WNS_ASSERT_MAX_REL_ERROR(meanTrafficRate * trafficDuration, static_cast<double>(testGeneratorMMPP->countedBits()), 0.7);
 }
 
 void ARMATest::testTargetRate()
