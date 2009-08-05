@@ -46,7 +46,6 @@ TcpBinding::TcpBinding(const wns::pyconfig::View& _pyco):
 	domainName(_pyco.get<std::string>("domainName")),
 	destinationDomainName(_pyco.get<std::string>("destinationDomainName")),
 	destinationPort(_pyco.get<int>("destinationPort")),
-	qosClass(wns::service::qos::QoSClasses::fromString(_pyco.get<std::string>("qosClass"))), // aoz does not support this solution. aoz wanted the qosClass to be a parameter of the generator
 	log(pyco.get("logger"))
 {
 	startTrigger = NULL;

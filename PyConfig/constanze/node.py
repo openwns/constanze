@@ -71,11 +71,11 @@ class UDPBinding(object):
     qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.backgroundQosClass, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.undefinedQosClass, parentLogger = None):
         self.domainName = _domainName;
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
-        self.qosClass = qosClass
+        self.qosClass = qosClass.number
         self.logger = Logger("UDPBinding", True, parentLogger)
 
 class UDPListenerBinding(object):
@@ -101,11 +101,11 @@ class TCPBinding(object):
     qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.backgroundQosClass, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.undefinedQosClass, parentLogger = None):
         self.domainName = _domainName
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
-        self.qosClass = qosClass
+        self.qosClass = qosClass.number
         self.logger = Logger("TCPBinding", True, parentLogger)
 
 class TCPListenerBinding(object):
@@ -196,11 +196,11 @@ class UDPBinding(object):
     qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.backgroundQosClass, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destionationPort, qosClass = openwns.qos.undefinedQosClass, parentLogger = None):
         self.domainName = _domainName;
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destionationPort
-        self.qosClass = qosClass
+        self.qosClass = qosClass.number
         self.logger = Logger("UDPBinding", True, parentLogger)
 
 class UDPListenerBinding(object):
@@ -227,11 +227,11 @@ class TCPClientBinding(object):
     qosClass = None
     logger = None
 
-    def __init__(self, _domainName, _destinationDomainName, _destinationPort, qosClass = openwns.qos.backgroundQosClass, parentLogger = None):
+    def __init__(self, _domainName, _destinationDomainName, _destinationPort, qosClass = openwns.qos.undefinedQosClass, parentLogger = None):
         self.domainName = _domainName
         self.destinationDomainName = _destinationDomainName
         self.destinationPort = _destinationPort
-        self.qosClass = qosClass
+        self.qosClass = qosClass.number
         self.logger = Logger("TCPClientBinding", True, parentLogger)
 
 class TCPServerListenerBinding(object):

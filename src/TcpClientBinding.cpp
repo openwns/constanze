@@ -15,7 +15,6 @@
 #include <WNS/StaticFactory.hpp>
 #include <WNS/service/nl/Address.hpp>
 #include <WNS/service/tl/PortPool.hpp>
-#include <WNS/service/qos/QoSClasses.hpp>
 #include <WNS/module/Base.hpp>
 
 using namespace constanze;
@@ -32,7 +31,7 @@ TcpClientBinding::TcpClientBinding(const wns::pyconfig::View& _pyco):
 	domainName(_pyco.get<std::string>("domainName")),
 	destinationDomainName(_pyco.get<std::string>("destinationDomainName")),
 	destinationPort(_pyco.get<int>("destinationPort")),
-	qosClass(wns::service::qos::QoSClasses::fromString(_pyco.get<std::string>("qosClass"))), // aoz does not support this solution. aoz wanted the qosClass to be a parameter of the generator
+	qosClass(_pyco.get<int>("qosClass")), // aoz does not support this solution. aoz wanted the qosClass to be a parameter of the generator
 	log(pyco.get("logger")),
 	packetCounter(0),
 	bitCounter(0)
@@ -45,9 +44,7 @@ TcpClientBinding::TcpClientBinding(const wns::pyconfig::View& _pyco):
 
 	MESSAGE_BEGIN(NORMAL, log, m, "New TcpClientBinding created. Destination=");
 	m << destinationDomainName << ":" << destinationPort;
-	if (qosClass != wns::service::qos::QoSClasses::UNDEFINED()) {
-	  m << ", QoSClass="<<qosClass;
-	}
+	m << ", QoSClass="<<qosClass;
 	MESSAGE_END();
 }
 
