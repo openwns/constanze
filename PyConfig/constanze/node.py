@@ -169,7 +169,7 @@ class DllBinding(object):
 
     def __init__(self, _destinationDll, _stationName, parentLogger = None):
         self.destinationDllAddress = _destinationDll
-        self.dllDataTransmission = _stationName + ".dllDataTransmission"
+        self.dllDataTransmission = _stationName + ".dllUnicastDataTransmission"
         self.logger = Logger("DllBinding", True, parentLogger)
 
 class DllListenerBinding(object):
@@ -182,7 +182,7 @@ class DllListenerBinding(object):
 
     def __init__(self, _listenDll, _stationName, parentLogger = None):
         self.listenDll = _listenDll
-        self.dllNotification = _stationName + ".dllNotification"
+        self.dllNotification = _stationName + ".dllUnicastNotification"
         self.logger = Logger("DllListenerBinding", True, parentLogger)
 
 class UDPBinding(object):
