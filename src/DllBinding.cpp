@@ -42,7 +42,7 @@ STATIC_FACTORY_REGISTER_WITH_CREATOR(
 
 DllBinding::DllBinding(const wns::pyconfig::View& _pyco):
 	pyco(_pyco),
-	destinationDllAddress(pyco.get<int32_t>("destinationDllAddress")),
+	destinationDllAddress(pyco.get<long int>("destinationDllAddress")),
 	log(pyco.get("logger"))
 {
 	MESSAGE_BEGIN(NORMAL, log, m, "New DllBinding created. DestinationMACAddress="<<destinationDllAddress);

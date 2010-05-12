@@ -176,7 +176,7 @@ struct systemStatType* SystemUsageStats::getCurrentSystemUsageStats()
 	CPPUNIT_ASSERT(in.good());
 	in >> systemStat.size >> systemStat.resident >> systemStat.share >> systemStat.text >> systemStat.lib >> systemStat.data;
 	in.close();
-	uint32_t pagesize = getpagesize(); // values are in "pages" which are usually 4KB of size:
+	unsigned long int pagesize = getpagesize(); // values are in "pages" which are usually 4KB of size:
 	systemStat.size*=pagesize; systemStat.resident*=pagesize; systemStat.share*=pagesize; systemStat.text*=pagesize; systemStat.lib*=pagesize; systemStat.data*=pagesize;
 	return &systemStat;
 }

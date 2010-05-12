@@ -41,7 +41,7 @@ STATIC_FACTORY_REGISTER_WITH_CREATOR(
 
 DllListenerBinding::DllListenerBinding(const wns::pyconfig::View& _pyco):
 	pyco(_pyco),
-	listenDll(pyco.get<int32_t>("listenDll")),
+	listenDll(pyco.get<long int>("listenDll")),
 	log(pyco.get("logger"))
 {
 	MESSAGE_BEGIN(NORMAL, log, m, "New DllListenerBinding created for own MACAddress=");
