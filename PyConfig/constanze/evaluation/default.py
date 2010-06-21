@@ -63,10 +63,10 @@ def installEvaluation(sim, maxPacketDelay, maxPacketSize, maxBitThroughput, maxP
 
     sourceName = 'traffic.windowedEndToEndIncomingBitThroughputTrace'
     node = openwns.evaluation.createSourceNode(sim, sourceName)
-    node.appendChildren(TextTrace(name = sourceName,
+    node.appendChildren(TextTrace(key = sourceName,
                                   description = 'windowed bit rate [Bit/s]'))
 
     sourceName = 'traffic.windowedEndToEndIncomingPacketThroughputTrace'
     node = openwns.evaluation.createSourceNode(sim, sourceName)
-    node.appendChildren(TextTrace(name = sourceName,
+    node.appendChildren(TextTrace(key = sourceName,
                                   description = 'windowed packet rate [Packets/s]'))
