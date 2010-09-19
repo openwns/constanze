@@ -203,6 +203,27 @@ class UDPBinding(object):
         self.qosClass = qosClass.number
         self.logger = Logger("UDPBinding", True, parentLogger)
 
+class UDPClientBinding(object):
+    nameInBindingFactory = "UdpClientBinding"
+    # the UDP service
+    udpService = "tcp.connectionService"
+    dnsService = "ip.dns"
+    # UDP specific parameters
+    domainName = None
+    destinationDomainName = None
+    destinationPort = None
+    qosClass = None
+    logger = None
+    listener = None
+
+    def __init__(self, _domainName, _destinationDomainName, _destinationPort, qosClass = openwns.qos.undefinedQosClass,parentLogger = None, **kw):
+        self.domainName = _domainName
+        self.destinationDomainName = _destinationDomainName
+        self.destinationPort = _destinationPort
+        self.qosClass = qosClass.number
+        self.logger = Logger("UDPClientBinding", True, parentLogger)
+        self.listener = Listener(self.domainName, self.logger, **kw)
+
 class UDPListenerBinding(object):
     nameInBindingFactory = "UdpListenerBinding"
     # the UDP service
@@ -214,6 +235,21 @@ class UDPListenerBinding(object):
     def __init__(self, _listenPort, parentLogger = None):
         self.listenPort = _listenPort
         self.logger = Logger("UDPListenerBinding", True, parentLogger)
+
+class UDPServerListenerBinding(object):
+    nameInBindingFactory = "UdpServerListenerBinding"
+    # the UDP service
+    udpService = "tcp.connectionService"
+    dnsService = "ip.dns"
+    # UDP specific parameters
+    listenPort = None
+    logger = None
+    generator = None
+
+    def __init__(self, _listenPort, _generator, parentLogger = None):
+        self.listenPort = _listenPort
+        self.generator = _generator
+        self.logger = Logger("UDPServerListenerBinding", True, parentLogger)
 
 class TCPClientBinding(object):
     nameInBindingFactory = "TcpClientBinding"
