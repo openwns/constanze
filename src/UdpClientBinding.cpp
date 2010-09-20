@@ -105,6 +105,7 @@ UdpClientBinding::onData(const wns::osi::PDUPtr& _pdu)
     packetCounter ++;
     bitCounter += bits;
 
+    MESSAGE_SINGLE(NORMAL, log, "Received " << _pdu->getLengthInBits()/8 << " bytes");
     listener->onData(_pdu);
 }
 
