@@ -239,7 +239,7 @@ void ARMATest::testStopTime()
 	CPPUNIT_ASSERT(!scheduler->processOneEvent()); // No more events in queue
 	// around 540 packets sent (~637 events):
 	CPPUNIT_ASSERT_EQUAL(binding->SentDataCounter, testGeneratorMMPP->countedPackets());
-	CPPUNIT_ASSERT(testGeneratorMMPP->countedPackets() > 400);
+	CPPUNIT_ASSERT(testGeneratorMMPP->countedPackets() > 390);
 	CPPUNIT_ASSERT(testGeneratorMMPP->countedPackets() < it);
 	CPPUNIT_ASSERT(testGeneratorMMPP->countedBits() > minTrafficRate  * trafficDuration);
 	CPPUNIT_ASSERT(testGeneratorMMPP->countedBits() < maxTrafficRate  * trafficDuration);
